@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choose Your Plan</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #eef8ff, #dff3ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #222;
+    padding: 40px 0;
+}
+
+.container {
+    width: 1100px;
+    max-width: 95%;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.title h1 {
+    color: #1479ff;
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.title p {
+    color: #666;
+}
+
+.cards {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Base Card Style */
+.card {
+    width: 340px;
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: 0.35s;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 18px 40px rgba(20, 121, 255, 0.25);
+}
+
+.plan {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1479ff;
+}
+
+.price {
+    font-size: 48px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.price span {
+    font-size: 18px;
+    color: #777;
+}
+
+.features {
+    list-style: none;
+    margin: 25px 0;
+}
+
+.features li {
+    margin: 15px 0;
+    color: #555;
+}
+
+.features li::before {
+    content: "✔";
+    color: #1479ff;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: #1479ff;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #0060dd;
+}
+
+/* Style for PRO card */
+.pro {
+    border: 3px solid #1479ff;
+}
+.pro:hover {
+    box-shadow: 0 20px 50px rgba(20, 121, 255, 0.35), 0 0 25px rgba(20, 121, 255, 0.25);
+}
+
+/* Style for PREMIUM card */
+.premium {
+    border: 3px solid #FFD700;
+    transform: scale(1.05);
+}
+
+.premium:hover {
+    transform: scale(1.08);
+    border: 3px solid #FFD700;
+    box-shadow: 0 20px 50px rgba(255, 215, 0, 0.45), 0 0 25px rgba(255, 215, 0, 0.55);
+}
+
+.premium .plan { 
+    color: #FFD700; 
+}
+.premium .features li::before { 
+    color: #FFD700; 
+}
+.premium button {
+    background: #FFD700;
+    color: #222;
+    font-weight: bold;
+}
+.premium button:hover {
+    background: #ffca00;
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.55);
+}
+
+.badge {
+    position: absolute;
+    right: -45px;
+    top: 22px;
+    color: white;
+    padding: 8px 50px;
+    transform: rotate(45deg);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.badge.blue { 
+    background: #1479ff; 
+}
+.badge.gold { 
+    background: #FFD700; 
+    color: #222; 
+}
+
+/* Popup Styles */
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup-box {
+    width: 360px;
+    background: white;
+    border-radius: 18px;
+    padding: 30px;
+    text-align: center;
+    animation: popup 0.25s;
+}
+
+@keyframes popup {
+    from { 
+        transform: scale(0.8); 
+        opacity: 0; 
+    }
+    to { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+}
+
+.popup input {
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px;
+    border: 2px solid #1479ff;
+    border-radius: 10px;
+    outline: none;
+    font-size: 16px;
+}
+
+.popup-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.popup-buttons button { 
+    flex: 1; 
+}
+.cancel { 
+    background: #888; 
+}
+.cancel:hover { 
+    background: #666; 
+}
+
+.loading { 
+    margin-top: 20px; 
+}
+.spinner {
+    width: 42px;
+    height: 42px;
+    margin: auto;
+    border: 4px solid #ddd;
+    border-top: 4px solid #FFD700;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { 
+        transform: rotate(360deg); 
+    }
+}
+
+.footer {
+    text-align: center;
+    margin-top: 50px;
+    color: #777;
+    width: 100%;
+}
+
+@media(max-width: 1050px) {
+    .cards { 
+        flex-direction: column; 
+        align-items: center; 
+    }
+    .premium { 
+        transform: none; 
+    }
+    .premium:hover { 
+        transform: translateY(-10px); 
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="title">
+        <h1>Chọn gói của bạn</h1>
+        <p>Chọn gói phù hợp với bạn nhất.</p>
+    </div>
+
+    <div class="cards">
+        
+        <div class="card">
+            <div class="plan">FREE</div>
+            <div class="price">$0<span>/Vĩnh viễn</span></div>
+            <ul class="features">
+                <li>Các tính năng cơ bản</li>
+                <li>Giới hạn truy cập</li>
+                <li>Có thể xảy ra lỗi</li>
+                <li>Giới hạn thông tin</li>
+                <li>Giao diện thường</li>
+            </ul>
+            <button onclick="goFree()">Truy cập</button>
+        </div>
+
+        <div class="card pro">
+            <div class="badge blue">Đề xuất</div>
+            <div class="plan">PRO</div>
+            <div class="price">$7.99<span>/Vĩnh viễn</span></div>
+            <ul class="features">
+                <li>Không giới hạn truy cập</li>
+                <li>Tất cả tính năng nâng cao</li>
+                <li>Thông tin đa dạng</li>
+                <li>Giao diện hiện đại</li>
+                <li>Dạy học hay hơn</li>
+            </ul>
+            <button onclick="openPopup('PRO')">Truy cập</button>
+        </div>
+
+        <div class="card premium">
+            <div class="badge gold">Phổ biến nhất</div>
+            <div class="plan">PREMIUM</div>
+            <div class="price">$19.99<span>/Vĩnh viễn</span></div>
+            <ul class="features">
+                <li>Mọi tính năng của gói PRO</li>
+                <li>Hỗ trợ tuyệt vời 24/7</li>
+                <li>Tài liệu độc quyền</li>
+                <li>Cố vấn học tập 1-1</li>
+                <li>Nhiều hơn nữa...</li>
+            </ul>
+            <button onclick="openPopup('PREMIUM')">Truy cập</button>
+        </div>
+
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 Trương Gia Bảo. All rights reserved.</p>
+    </div>
+
+</div>
+
+<div id="passwordPopup" class="popup">
+    <div class="popup-box">
+        <h2 id="popupTitle">🔒 Gói PRO</h2>
+        <p>Vui lòng nhập mật khẩu.</p>
+        <p style="font-size: 14px; color: #777; margin-top: 5px;">
+            Liên hệ <b>Trương Gia Bảo</b> để nhận mật khẩu.
+        </p>
+
+        <input type="password" id="passwordInput" placeholder="Nhập mật khẩu">
+        <div id="errorText" style="color: red; margin-top: 10px; height: 20px;"></div>
+
+        <div class="popup-buttons">
+            <button onclick="closePopup()" class="cancel">Hủy</button>
+            <button onclick="checkPassword()">Xác nhận</button>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p id="loadingText">Đang xác minh...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Khai báo 2 mật khẩu khác nhau cho 2 gói
+const PASSWORD_PRO = "PROACT1407";
+const PASSWORD_PREMIUM = "PREACT0010"; // Bạn có thể thay đổi mật khẩu PREMIUM tại đây
+
+let selectedPlan = ""; 
+
+function openPopup(planName) {
+    selectedPlan = planName;
+    document.getElementById("popupTitle").innerHTML = "🔒 Gói " + planName;
+    document.getElementById("passwordPopup").style.display = "flex";
+}
+
+function closePopup() {
+    document.getElementById("passwordPopup").style.display = "none";
+    document.getElementById("passwordInput").value = "";
+    document.getElementById("passwordInput").style.display = "block";
+    document.querySelector(".popup-buttons").style.display = "flex";
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("errorText").innerHTML = "";
+}
+
+function checkPassword() {
+    const input = document.getElementById("passwordInput").value;
+    let correctPassword = "";
+
+    // Kiểm tra xem người dùng đang ở gói nào để gán đúng mật khẩu
+    if (selectedPlan === "PRO") {
+        correctPassword = PASSWORD_PRO;
+    } else if (selectedPlan === "PREMIUM") {
+        correctPassword = PASSWORD_PREMIUM;
+    }
+
+    // So sánh mật khẩu nhập vào với mật khẩu đúng của gói đó
+    if (input !== correctPassword) {
+        document.getElementById("errorText").innerHTML = "❌ Sai mật khẩu!";
+        return;
+    }
+
+    document.getElementById("errorText").innerHTML = "";
+    document.getElementById("passwordInput").style.display = "none";
+    document.querySelector(".popup-buttons").style.display = "none";
+    document.getElementById("loading").style.display = "block";
+
+    setTimeout(function() {
+        if (selectedPlan === "PRO") {
+            window.location.href = "file:///C:/Users/ADMIN/Downloads/english-for-teachers/english-for-teachers/index.html";
+        } else if (selectedPlan === "PREMIUM") {
+            // Bạn có thể đổi đường link khác cho gói PREMIUM ở dòng dưới đây nếu muốn
+            window.location.href = "file:///C:/Users/ADMIN/Downloads/files/english-for-teachers/english-for-teachers/index.html";
+        }
+    }, 1500);
+}
+
+function goFree() { 
+    window.location.href = "C:/Users/ADMIN/Downloads/english-for-teachers%20(1)/english-for-teachers/index.html"; 
+}
+
+document.getElementById("passwordInput").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+        checkPassword();
+    }
+});
+</script>
+
+</body>
+</html>
